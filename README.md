@@ -1,13 +1,6 @@
-Okay, this is an excellent request! A well-structured GitHub README is crucial for any project. I'll create a comprehensive README that describes your NeuroFlux AGRAG (Ghostwriter) system, its architecture, how to set it up, and how to use it, along with a definitive list of all files and directories required for a successful upload to GitHub.
 
----
-
-# NeuroFlux AGRAG (Ghostwriter Protocol)
-
-## 🌌 Advanced Generative Research Agent - v21.0
-
-![NeuroFlux UI Screenshot (Conceptual - matches latest design)](https://raw.githubusercontent.com/user/repo/main/docs/neuroflux_ui_latest.png)
-*(Self-correction: I'm providing a placeholder image link as I cannot generate images, but this is where you'd put a screenshot of your beautiful new UI!)*
+# NeuroFlux AGRAG (Ghostwriter Protocol) 🌌 Advanced Generative Research Agent 
+![image](https://github.com/user-attachments/assets/e1dc3596-01e3-4ec5-be2d-fb840fd01d86)
 
 NeuroFlux AGRAG, powered by the "Ghostwriter Protocol," is an innovative AI agent designed to generate deep, insightful, and polished "white paper" style reports. It leverages a sophisticated "Trinity" architecture to combine strategic planning, robust knowledge retrieval, and professional content synthesis, enabling it to tackle complex queries with multi-faceted information needs.
 
@@ -162,7 +155,7 @@ Follow these steps to get NeuroFlux AGRAG up and running:
 
 ### 📁 Project Structure
 
-```
+
 neuroflux-agrag/
 ├── main.py                   # FastAPI backend, LLM orchestration, RAG, PostgreSQL integration
 ├── requirements.txt          # Python dependencies
@@ -173,7 +166,7 @@ neuroflux-agrag/
     ├── index.html            # Main HTML UI structure
     ├── style.css             # Frontend styling (CSS)
     └── app.js                # Frontend interactivity (JavaScript)
-```
+
 
 ### 🤝 Contributing
 
@@ -190,25 +183,26 @@ This project is open-source and available under the [MIT License](LICENSE).
 *   **FastAPI:** For the robust and efficient backend framework.
 *   **LlamaIndex:** For the RAG framework.
 *   **Asyncpg & SQLGlot:** For asynchronous PostgreSQL interaction and SQL validation.
+*   **Qdrant: Rag database management 
 *   **Feather Icons:** For the clean and modern UI icons.
 
----
+ 
 
-## **Files Needed for Upload to GitHub:**
 
-Based on the provided code and common practices, here are the essential files and directories you need to commit to your GitHub repository for a complete and runnable project:
 
-```
+Here are the essential files and directories you need to commit to your GitHub repository for a complete and runnable project:
+
+ 
 neuroflux-agrag/
 ├── main.py
 ├── requirements.txt
 ├── .env.example
-├── knowledge_docs/    # This directory should be committed, even if empty, as a placeholder
+├── knowledge_docs/     
 └── frontend/
     ├── index.html
     ├── style.css
     └── app.js
-```
+ 
 
 **Files/Directories to IGNORE (add to `.gitignore` if not already present):**
 
@@ -221,7 +215,7 @@ neuroflux-agrag/
 
 You should create a `.gitignore` file in your root directory if you don't have one, and add these entries:
 
-```
+ 
 # Python
 __pycache__/
 *.pyc

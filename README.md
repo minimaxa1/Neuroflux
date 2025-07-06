@@ -1,8 +1,8 @@
 
-# NeuroFlux AGRAG (Ghostwriter Protocol) 🌌 Advanced Generative Research Agent 
+# NeuroFlux AGRAG - Advanced Generative Research Agent 
 ![image](https://github.com/user-attachments/assets/e1dc3596-01e3-4ec5-be2d-fb840fd01d86)
 
-NeuroFlux AGRAG, powered by the "Ghostwriter Protocol," is an innovative AI agent designed to generate deep, insightful, and polished "white paper" style reports. It leverages a sophisticated "Trinity" architecture to combine strategic planning, robust knowledge retrieval, and professional content synthesis, enabling it to tackle complex queries with multi-faceted information needs.
+NeuroFlux AGRAG, is an innovative AI agent designed to generate deep, insightful, and polished "white paper" style reports. It leverages a sophisticated "Trinity" architecture to combine strategic planning, robust knowledge retrieval, and professional content synthesis, enabling it to tackle complex queries with multi-faceted information needs.
 
 Sample report here at blog: https://minimaxa1.github.io/Architecting-You/Neuroflux%20-%20AgRag%20Report.html
 

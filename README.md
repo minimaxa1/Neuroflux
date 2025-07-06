@@ -174,7 +174,7 @@ Contributions are welcome! If you have suggestions for improvements, bug fixes, 
 
 ### 📄 License
 
-This project is open-source and available under the [MIT License](LICENSE).
+This project is open-source and available under the GPL v3. 
 
 ### 🙏 Acknowledgements
 
@@ -251,4 +251,9 @@ test_import.py
 config.yaml
 drive_scanner.py
 google*.txt
-```
+
+Feel free to fork, improve, and learn from this project!
+
+Enjoy!
+
+Bohemai

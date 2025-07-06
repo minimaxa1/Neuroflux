@@ -1,0 +1,35 @@
+# File: requirements.txt
+
+# Core Web Framework
+fastapi
+uvicorn
+python-dotenv
+pydantic
+pydantic-settings
+
+# HTTP Client and Web Scraping
+httpx
+beautifulsoup4
+
+# LlamaIndex and Vector Stores
+llama-index-core
+llama-index-vector-stores-qdrant
+llama-index-embeddings-fastembed
+qdrant-client
+
+# Machine Learning and Data
+torch
+networkx
+python-louvain
+google-generativeai
+
+# Utilities and Production Features
+tenacity
+psutil
+slowapi
+prometheus-client
+async-lru
+pybreaker  # For circuit breakers
+apscheduler # For scheduled tasks
+structlog
+email_validator

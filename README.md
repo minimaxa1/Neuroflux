@@ -2,11 +2,15 @@ NeuroFlux AGRAG (Ghostwriter Protocol) 🌌 Advanced Generative Research Agent
 
 ![image](https://github.com/user-attachments/assets/26600f57-5b07-40ad-9576-cc653b773b43)
 
-NeuroFlux AGRAG, powered by the "Ghostwriter Protocol," is an innovative AI agent designed to generate deep, insightful, and polished "white paper" style reports. It leverages a sophisticated "Trinity" architecture to combine strategic planning, robust knowledge retrieval, and professional content synthesis, enabling it to tackle complex queries with multi-faceted information needs.
+NeuroFlux AGRAG, powered by the "Ghostwriter Protocol," is an innovative AI agent designed to generate deep, insightful, and polished "white paper" style reports. 
+
+It leverages a sophisticated "Trinity" architecture to combine strategic planning, robust knowledge retrieval, and professional content synthesis, enabling it to tackle complex queries with multi-faceted information needs.
 
 
 ✨ Features
+
 "Trinity" Architecture: A powerful collaboration between three core AI components:
+
 Mind (Strategist): Powered by Google Gemini, it creates a comprehensive narrative plan, synthesizes research findings, and generates novel insights.
 Soul (Memory): Facilitates Retrieval-Augmented Generation (RAG) from a local document knowledge base (in-memory SimpleVectorStore) and integrates structured data from an asynchronous PostgreSQL database.
 Voice (Ghostwriter): Utilizes Ollama-compatible local LLMs (e.g., Mistral, Llama3) to expand the synthesized briefing into a full, polished, HTML-formatted research report.
@@ -22,7 +26,9 @@ Sleek, Professional UI: A refined, dark greyscale user interface inspired by the
 
 
 🧠 Architecture Overview
+
 The NeuroFlux AGRAG operates on a "Trinity" principle, where distinct AI roles collaborate:
+
 Mind (Google Gemini):
 Receives the initial strategic query.
 Generates a research_plan that outlines necessary information gathering tasks.
@@ -37,7 +43,9 @@ Acts as the "Ghostwriter," expanding the briefing's content into a full, detaile
 
 
 ⚙️ Prerequisites
+
 Before you begin, ensure you have the following installed and configured:
+
 Python: Version 3.9 or higher.
 Ollama: Download and install Ollama from ollama.com.
 After installation, pull the required models. The system attempts to select optimal models (llama3:8b-instruct, command-r, mistral, llama3), but mistral:latest is preferred for the "Ghostwriter."
@@ -53,4 +61,5 @@ Git: For cloning the repository.
 
 
 🚀 Installation & Setup
+
 Follow these steps to get NeuroFlux AGRAG up and running:

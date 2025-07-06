@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroFlux AGRAG</title>
+    <!-- Link to the external stylesheet -->
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Feather icons for UI elements, like Orbe -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+<body>
+    <main>
+        <!-- Agent's Thought Process (Top, enlarged) -->
+        <div class="agent-output-panel">
+            <h2>Agent's Thought Process</h2>
+            <div id="log-output">The agent's real-time actions will appear here.</div>
+        </div>
+
+        <!-- Controls Area (Bottom, consolidated, Orbe-style) -->
+        <div class="controls-area">
+            <div id="status" class="system-status-bar">Initializing...</div>
+
+            <!-- Main control grid for model selectors and Index button -->
+            <div class="main-control-grid">
+                <div class="control-group model-group">
+                    <label for="target-model-select">Ghostwriter:</label>
+                    <div class="select-with-button">
+                        <select id="target-model-select" class="control-item" disabled><option>Loading...</option></select>
+                        <button id="refresh-models-btn" class="control-item icon-button" title="Refresh Models">
+                            <i data-feather="refresh-cw"></i> <!-- Feather refresh icon -->
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group model-group">
+                    <label for="drafter-model-select">Mind:</label>
+                    <select id="drafter-model-select" class="control-item" disabled><option>Loading...</option></select>
+                </div>
+                
+                <!-- Index button moved directly into the grid -->
+                <button id="index-btn" class="control-item primary-action-button">Index Knowledge Base</button>
+            </div>
+
+            <!-- Query input and action buttons row -->
+            <div class="input-row query-input-row">
+                <textarea id="query-input" placeholder="e.g., discuss the ethical challenges of using LLMs in critical decision-making processes, particularly when combining data from diverse sources (like structured databases and unstructured documents). Name at least two open-source frameworks or methodologies designed to address these ethical challenges in AI applications, and explain their role."></textarea>
+                
+                <div class="action-buttons">
+                    <button id="execute-btn" class="control-item send-button" disabled>
+                        <i data-feather="send"></i> <!-- Feather send icon -->
+                    </button>
+                    <button id="export-btn" class="control-item export-button" disabled>
+                        <i data-feather="download"></i> <!-- Feather download icon -->
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- *** THE DEFINITIVE FIX: Pointing to the correct static path *** -->
+    <script src="/static/app.js"></script>
+    <script>
+        // Initialize Feather Icons after the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+        });
+    </script>
+</body>
+</html>

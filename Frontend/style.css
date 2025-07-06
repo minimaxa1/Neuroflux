@@ -1,0 +1,484 @@
+:root {
+    /* Orbe-inspired Greyscale Color Palette (refined and corrected) */
+    --bg-color: #000000; /* Pure black for body */
+    --container-bg: #0A0A0A; /* Darker black for main app panel */
+    --panel-bg: #1A1A1A; /* Very dark grey for top agent panel and bottom controls area */
+    --border-color: #333333; /* Mid-dark grey for standard borders */
+    
+    --primary-button-bg: #4A4A4A; /* Dark grey for primary action buttons (e.g., Index, Send) */
+    --primary-button-hover: #666666; /* Lighter grey for hover */
+    --secondary-button-bg: #333333; /* Even darker grey for secondary buttons (e.g., Export) */
+    --secondary-button-hover: #444444; /* Lighter grey for hover */
+    
+    --text-color-light: #E0E0E0; /* Soft white for main text, control labels */
+    --text-color-dark: #000000; /* Pure black for text on light backgrounds (used for query input text) */
+    --text-color-subtle: #A0A0A0; /* Lighter grey for placeholder, status, subtle hints */
+    
+    --input-bg-dark: #222222; /* Dark grey for select boxes, log output */
+    --input-bg-light: #E0E0E0; /* Light grey for query textarea background (as requested) */
+    --input-border-focus: #777777; /* Mid-grey for focus border */
+    
+    --error-color: #EF4444; /* Retained red for errors for clear visibility */
+    --disabled-bg: #252525;
+    --disabled-text: #606060;
+    
+    --shadow-light: rgba(0, 0, 0, 0.2); /* Soft shadow for inner elements */
+    --shadow-dark: rgba(0, 0, 0, 0.6); /* Stronger shadow for panel depth */
+    --glow-effect: rgba(150, 150, 150, 0.1); /* Subtle grey glow for focus/hover */
+
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    --border-radius-base: 8px; /* General rounded corners */
+    --border-radius-pill: 18px; /* Pill shape for buttons/inputs in bottom bar */
+}
+
+/* --- Base Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden; /* Prevent body scroll, main handles it */
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color-light);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px; /* Padding around the whole app container */
+}
+
+/* --- Main Layout Container --- */
+main {
+    display: flex;
+    flex-direction: column; /* Stack top output and bottom controls */
+    max-width: 1400px; /* Max width for the entire app */
+    width: 100%;
+    height: calc(100vh - 20px); /* Full viewport height minus body padding */
+    background-color: var(--container-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    box-shadow: 0 0 35px var(--shadow-light), inset 0 0 10px rgba(255, 255, 255, 0.03);
+    overflow: hidden; /* Contain inner scrolling */
+    position: relative; /* For z-index stacking */
+}
+
+/* --- Agent Output Panel (Top Section) --- */
+.agent-output-panel {
+    flex-grow: 1; /* Takes all available space */
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    overflow: hidden; /* For inner log-output scrolling */
+    background-color: var(--panel-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.agent-output-panel h2 {
+    color: var(--text-color-light); /* Title color */
+    font-size: 1.6rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+#log-output {
+    flex-grow: 1;
+    overflow-y: auto; /* Scrollable area for logs */
+    background-color: var(--input-bg-dark); /* Darker background for log area */
+    border-radius: var(--border-radius-base);
+    padding: 1rem;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: var(--text-color-light);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) var(--input-bg-dark);
+}
+
+#log-output::-webkit-scrollbar {
+    width: 8px;
+}
+#log-output::-webkit-scrollbar-track {
+    background: var(--input-bg-dark);
+    border-radius: 4px;
+}
+#log-output::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 4px;
+}
+
+.log-entry {
+    margin-bottom: 0.8rem;
+    white-space: pre-wrap; /* Preserves formatting and wraps */
+    word-wrap: break-word;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05); /* Subtle separator */
+    padding-bottom: 0.2rem;
+}
+.log-entry:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+.log-entry.phase-title {
+    font-weight: bold;
+    color: var(--text-color-light); /* Phase titles now light grey */
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 1.05rem;
+}
+.log-entry.error {
+    color: var(--error-color);
+    font-weight: bold;
+}
+.log-entry.plan {
+    background-color: rgba(0,0,0,0.15); /* Slightly different background for JSON plans */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    overflow-x: auto; /* Allow horizontal scroll for long lines in JSON */
+}
+
+/* --- Controls Area (Bottom Section - mimicking Orbe) --- */
+.controls-area {
+    background-color: var(--panel-bg); /* Use panel-bg for consistency */
+    padding: 10px 15px; /* Padding for the entire bottom bar */
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0; /* Prevent it from shrinking */
+    box-shadow: 0 -2px 10px var(--shadow-dark); /* Shadow pointing upwards */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between rows */
+}
+
+.system-status-bar {
+    font-size: 0.85rem;
+    color: var(--text-color-subtle);
+    text-align: center;
+    min-height: 20px; /* Reserve space */
+    margin-bottom: 5px; /* Small space before controls */
+}
+
+/* Main control grid for model selectors and Index button */
+.main-control-grid {
+    display: flex;
+    align-items: flex-end; /* Align items to the bottom, useful for labels above selects */
+    justify-content: flex-start; /* Start from the left */
+    gap: 15px; /* Increase gap between elements */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Small gap between label and control */
+}
+.control-group label {
+    font-size: 0.8em;
+    color: var(--text-color-subtle);
+    margin-bottom: 0; /* Override default margin */
+    align-self: flex-start; /* Align label to the left */
+}
+
+.model-group {
+    flex-grow: 0; /* Don't grow by default */
+    flex-shrink: 0;
+}
+
+/* --- Individual Control Item Styles (similar to Orbe's .control-item) --- */
+.control-item {
+    font-size: 0.9rem;
+    padding: 0 12px;
+    border-radius: var(--border-radius-pill); /* Pill shape */
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg-dark); /* Dark background for controls */
+    color: var(--text-color-light);
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+    height: 38px; /* Consistent height for row items */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Prevent shrinking by default */
+    box-shadow: inset 0 1px 2px var(--shadow-light); /* Inner shadow for depth */
+}
+
+.control-item:hover:not(:disabled) {
+    background-color: #383838; /* Lighter dark grey on hover */
+    border-color: #555555;
+    color: var(--text-color-light); /* Text color stays light */
+    box-shadow: inset 0 1px 2px var(--shadow-light), 0 0 5px var(--glow-effect); /* Subtle glow on hover */
+}
+
+.control-item:active:not(:disabled) {
+    background-color: #1A1A1A; /* Darker on active */
+    box-shadow: inset 0 2px 4px var(--shadow-dark); /* More pronounced inner shadow */
+}
+
+.control-item:focus {
+    outline: none;
+    border-color: var(--input-border-focus);
+    box-shadow: 0 0 0 2px var(--glow-effect); /* Stronger focus ring */
+}
+
+/* Specific styling for select elements to remove default arrow and add custom one */
+select.control-item {
+    -webkit-appearance: none; /* Remove default arrow */
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cpath d='M.75 16.75l38.5 38.5 38.5-38.5z' fill='%23A0A0A0'/%3E%3C/svg%3E"); /* Custom arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px;
+    padding-right: 30px; /* Make space for the arrow */
+    flex-grow: 1; /* Allow select to grow */
+    min-width: 120px;
+    max-width: 200px; /* Default max-width for selects */
+}
+select.control-item:hover {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cpath d='M.75 16.75l38.5 38.5 38.5-38.5z' fill='%23E0E0E0'/%3E%3C/svg%3E"); /* Lighter arrow on hover */
+}
+
+.select-with-button {
+    display: flex;
+    gap: 8px; /* Space between select and refresh button */
+    flex-grow: 1;
+}
+.select-with-button select {
+    margin-bottom: 0; /* Remove default select margin */
+}
+
+.icon-button {
+    width: 38px; /* Square for icon button */
+    height: 38px;
+    padding: 0;
+    border-radius: 50%; /* Circular button */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem; /* Size of the icon */
+    color: var(--text-color-light); /* Icon color */
+}
+.icon-button:hover:not(:disabled) {
+    color: var(--text-color-light);
+    background-color: #383838;
+}
+
+/* Index button styling */
+#index-btn {
+    /* Adjusted order for layout in main-control-grid */
+    order: 3; /* Push it to the end in the flex container */
+    margin-left: auto; /* Pushes button to the right on larger screens */
+    margin-bottom: 0; /* Remove default button margin */
+}
+
+
+/* --- Query Input (Textarea) --- */
+.input-row {
+    display: flex;
+    align-items: flex-end; /* Align items to the bottom, useful for textarea/buttons */
+    gap: 8px; /* Space between textarea and buttons */
+    width: 100%;
+}
+
+textarea#query-input {
+    flex-grow: 1; /* Allows textarea to expand horizontally */
+    min-width: 300px; /* Minimum width for readability */
+    height: 38px; /* Match height of other controls for single line */
+    min-height: 38px; /* Smallest it can be */
+    max-height: 100px; /* Limit vertical expansion */
+    padding: 8px 12px;
+    border-radius: var(--border-radius-pill);
+    resize: vertical; /* Allow vertical resizing */
+    font-size: 0.95rem;
+    margin-bottom: 0; /* Remove default margin */
+    overflow-y: auto; /* Show scrollbar if content exceeds height */
+    
+    background-color: var(--input-bg-light); /* LIGHT GREY BACKGROUND (as requested) */
+    color: var(--text-color-dark); /* BLACK TEXT for contrast on light background */
+    
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) var(--input-bg-light);
+}
+textarea#query-input::-webkit-scrollbar {
+    width: 8px;
+}
+textarea#query-input::-webkit-scrollbar-track {
+    background: var(--input-bg-light);
+    border-radius: 4px;
+}
+textarea#query-input::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 4px;
+}
+textarea#query-input::placeholder {
+    color: var(--text-color-subtle); /* Placeholder text color */
+    opacity: 0.8;
+}
+
+/* --- Action Buttons (Send, Export) --- */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.primary-action-button, .send-button, .export-button {
+    min-width: 45px; /* Larger buttons for primary actions */
+    height: 38px;
+    padding: 0 15px; /* Horizontal padding for text/icon */
+    border-radius: var(--border-radius-pill);
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px; /* Space between icon and text if any */
+}
+
+.primary-action-button {
+    background-color: var(--primary-button-bg); /* Use primary button style for 'Index' */
+    color: var(--text-color-light);
+}
+.primary-action-button:hover:not(:disabled) {
+    background-color: var(--primary-button-hover);
+}
+
+.send-button {
+    background-color: var(--primary-button-bg); /* Use primary button style for send */
+    color: var(--text-color-light);
+}
+.send-button:hover:not(:disabled) {
+    background-color: var(--primary-button-hover);
+}
+
+.export-button {
+    background-color: var(--secondary-button-bg); /* Use secondary button style for export */
+    color: var(--text-color-light);
+}
+.export-button:hover:not(:disabled) {
+    background-color: var(--secondary-button-hover);
+}
+
+/* Disabled states */
+.control-item:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--disabled-bg);
+    border-color: var(--disabled-bg);
+    color: var(--disabled-text);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+    transform: none; /* Remove hover/active transforms */
+}
+.control-item:disabled i {
+    color: var(--disabled-text);
+}
+
+/* Animation for spinning refresh icon */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+    main {
+        height: calc(100vh - 20px);
+        flex-direction: column; /* Ensure vertical stacking */
+        width: 98%; /* More width on smaller screens */
+    }
+    .controls-area {
+        gap: 8px;
+    }
+    .main-control-grid {
+        flex-direction: column; /* Stack model selectors and index button vertically */
+        align-items: stretch; /* Stretch items to fill width */
+        justify-content: flex-start; /* Align to top */
+    }
+    .control-group {
+        width: 100%; /* Make each control group full width */
+    }
+    .select-with-button {
+        width: 100%;
+    }
+    select.control-item {
+        max-width: none; /* Remove max-width on smaller screens */
+    }
+    #index-btn {
+        order: unset; /* Remove specific order on smaller screens */
+        margin-left: 0; /* Remove auto margin */
+        width: 100%; /* Full width */
+        margin-top: 5px; /* Small space from above elements */
+    }
+    .query-input-row {
+        flex-direction: column; /* Stack query input and buttons */
+        align-items: stretch;
+    }
+    textarea#query-input {
+        min-width: auto;
+        width: 100%;
+    }
+    .action-buttons {
+        width: 100%;
+        justify-content: stretch; /* Stretch buttons in row */
+    }
+    .primary-action-button, .send-button, .export-button {
+        flex-grow: 1; /* Make buttons fill available space */
+        min-width: 48%; /* Ensure they don't get too small */
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 5px;
+    }
+    main {
+        height: calc(100vh - 10px);
+    }
+    .agent-output-panel h2 {
+        font-size: 1.4rem;
+    }
+    #log-output {
+        padding: 0.8rem;
+        font-size: 0.85em;
+    }
+    .controls-area {
+        padding: 8px 10px;
+        gap: 6px;
+    }
+    .system-status-bar {
+        font-size: 0.8rem;
+    }
+    .control-item {
+        height: 35px;
+        font-size: 0.85rem;
+    }
+    .icon-button {
+        width: 35px;
+        height: 35px;
+    }
+    .icon-button i {
+        width: 16px;
+        height: 16px;
+    }
+    textarea#query-input {
+        height: 35px;
+        min-height: 35px;
+        padding: 6px 10px;
+    }
+    .primary-action-button, .send-button, .export-button {
+        height: 35px;
+    }
+}

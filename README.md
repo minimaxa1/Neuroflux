@@ -6,7 +6,9 @@
 
 NeuroFlux AGRAG, is an innovative AI agent designed to generate deep, insightful, and polished "Research paper" style reports. It leverages a sophisticated "Trinity" architecture to combine strategic planning, robust knowledge retrieval, and professional content synthesis, enabling it to tackle complex queries with multi-faceted information needs.
 
-Sample report here at blog: https://minimaxa1.github.io/Architecting-You/Neuroflux%20-%20AgRag%20Report.html
+Sample report here at blog: 
+https://minimaxa1.github.io/Architecting-You/Guidebook%20Context%20Engineering.html
+https://minimaxa1.github.io/Architecting-You/Neuroflux%20-%20AgRag%20Report.html
 
 ### ✨ Features
 

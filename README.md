@@ -2,6 +2,8 @@
 # NeuroFlux AGRAG - Advanced Generative Research Agent 
 ![image](https://github.com/user-attachments/assets/e1dc3596-01e3-4ec5-be2d-fb840fd01d86)
 
+
+[![Watch the video](https://raw.githubusercontent.com/username/repository/branch/path/to/thumbnail.jpg)](https://github.com/minimaxa1/Neuroflux/blob/main/RAG%20project%20%202.mp4)
 NeuroFlux AGRAG, is an innovative AI agent designed to generate deep, insightful, and polished "white paper" style reports. It leverages a sophisticated "Trinity" architecture to combine strategic planning, robust knowledge retrieval, and professional content synthesis, enabling it to tackle complex queries with multi-faceted information needs.
 
 Sample report here at blog: https://minimaxa1.github.io/Architecting-You/Neuroflux%20-%20AgRag%20Report.html

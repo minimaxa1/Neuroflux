@@ -183,7 +183,7 @@ This project is open-source and available under the GPL v3.
 *   **FastAPI:** For the robust and efficient backend framework.
 *   **LlamaIndex:** For the RAG framework.
 *   **Asyncpg & SQLGlot:** For asynchronous PostgreSQL interaction and SQL validation.
-*   **Qdrant: Rag database management 
+*   **Qdrant:** Rag database management 
 *   **Feather Icons:** For the clean and modern UI icons.
 
  

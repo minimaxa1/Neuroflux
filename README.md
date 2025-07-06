@@ -63,3 +63,77 @@ Git: For cloning the repository.
 🚀 Installation & Setup
 
 Follow these steps to get NeuroFlux AGRAG up and running:
+
+Clone the Repository:
+Generated bash
+git clone https://github.com/your-username/neuroflux-agrag.git
+cd neuroflux-agrag
+Use code with caution.
+Bash
+(Replace your-username/neuroflux-agrag.git with the actual repository URL once you upload it.)
+Set Up Python Virtual Environment:
+It's highly recommended to use a virtual environment to manage dependencies.
+Generated bash
+python -m venv venv
+Use code with caution.
+Bash
+On Linux/macOS:
+Generated bash
+source venv/bin/activate
+Use code with caution.
+Bash
+On Windows:
+Generated bash
+.\venv\Scripts\activate
+Use code with caution.
+Bash
+Install Python Dependencies:
+Generated bash
+pip install -r requirements.txt
+Use code with caution.
+Bash
+Configure Environment Variables:
+Create a .env file in the root directory of the project (where main.py is located) and populate it with your credentials and settings.
+Copy the .env.example to .env:
+Generated bash
+cp .env.example .env
+Use code with caution.
+Bash
+Then, edit the .env file:
+Generated code
+# --- Required API Keys ---
+GOOGLE_API_KEY="YOUR_GOOGLE_GEMINI_API_KEY"
+
+# --- Ollama Configuration (defaults to localhost:11434, change if different) ---
+OLLAMA_API_BASE="http://localhost:11434"
+
+# --- Google Custom Search Engine (Optional, for web_search tool) ---
+# GOOGLE_CSE_ID="YOUR_GOOGLE_CSE_ID"
+
+# --- PostgreSQL Database Configuration ---
+POSTGRES_HOST="localhost"
+POSTGRES_PORT=5432
+POSTGRES_USER="your_pg_user"
+POSTGRES_PASSWORD="your_pg_password"
+POSTGRES_DB="your_pg_database_name"
+
+# --- Optional: Define your PostgreSQL schema for validation ---
+# This is critical for the LLM to understand what tables/columns it can query.
+# The default in main.py is:
+# POSTGRES_SCHEMA_DEFINITION={"users": ["id", "name", "email", "signup_date", "age"], "products": ["id", "name", "price", "category"], "orders": ["id", "user_id", "product_id", "quantity", "order_date"]}
+# If you change your schema, update this variable in .env or main.py.
+Use code with caution.
+IMPORTANT: Never commit your .env file to version control. It contains sensitive API keys. .gitignore should already exclude it.
+Prepare Knowledge Base (Optional but Recommended):
+Create a knowledge_docs directory in the project root. Place any .pdf, .txt, .md, etc., files you want the "Soul" to draw knowledge from into this directory.
+Generated bash
+mkdir knowledge_docs
+# cp your_documents/* knowledge_docs/
+Use code with caution.
+Bash
+Run the FastAPI Application:
+Generated bash
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+Use code with caution.
+Bash
+The --reload flag is useful for development as it automatically restarts the server when code changes are detected.

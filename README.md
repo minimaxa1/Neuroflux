@@ -242,17 +242,8 @@ storage/
 *.db
 *.bak
 *.tmp
-# Add any other specific files from your image you don't want to commit
-main*.py
-requirements*.txt
-rename_from_content.py
-uvicorn*.txt
-neuroflux_local_v5/
-backups/
-test_import.py
-config.yaml
-drive_scanner.py
-google*.txt
+
+
 
 Feel free to fork, improve, and learn from this project!
 

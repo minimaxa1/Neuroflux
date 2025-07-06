@@ -1,254 +1,168 @@
 Okay, this is an excellent request! A well-structured GitHub README is crucial for any project. I'll create a comprehensive README that describes your NeuroFlux AGRAG (Ghostwriter) system, its architecture, how to set it up, and how to use it, along with a definitive list of all files and directories required for a successful upload to GitHub.
 
-NeuroFlux AGRAG (Ghostwriter Protocol)
-🌌 Advanced Generative Research Agent - v21.0
+---
 
-![alt text](https://raw.githubusercontent.com/user/repo/main/docs/neuroflux_ui_latest.png)
+# NeuroFlux AGRAG (Ghostwriter Protocol)
 
-(Self-correction: I'm providing a placeholder image link as I cannot generate images, but this is where you'd put a screenshot of your beautiful new UI!)
+## 🌌 Advanced Generative Research Agent - v21.0
+
+![NeuroFlux UI Screenshot (Conceptual - matches latest design)](https://raw.githubusercontent.com/user/repo/main/docs/neuroflux_ui_latest.png)
+*(Self-correction: I'm providing a placeholder image link as I cannot generate images, but this is where you'd put a screenshot of your beautiful new UI!)*
 
 NeuroFlux AGRAG, powered by the "Ghostwriter Protocol," is an innovative AI agent designed to generate deep, insightful, and polished "white paper" style reports. It leverages a sophisticated "Trinity" architecture to combine strategic planning, robust knowledge retrieval, and professional content synthesis, enabling it to tackle complex queries with multi-faceted information needs.
 
-✨ Features
+### ✨ Features
 
-"Trinity" Architecture: A powerful collaboration between three core AI components:
+*   **"Trinity" Architecture:** A powerful collaboration between three core AI components:
+    *   **Mind (Strategist):** Powered by **Google Gemini**, it creates a comprehensive narrative plan, synthesizes research findings, and generates novel insights.
+    *   **Soul (Memory):** Facilitates Retrieval-Augmented Generation (RAG) from a local document knowledge base (in-memory `SimpleVectorStore`) and integrates structured data from an **asynchronous PostgreSQL database**.
+    *   **Voice (Ghostwriter):** Utilizes **Ollama-compatible local LLMs** (e.g., Mistral, Llama3) to expand the synthesized briefing into a full, polished, HTML-formatted research report.
+*   **Hybrid Data Integration:** Seamlessly combines information from:
+    *   **Web Search:** For general internet knowledge and current trends.
+    *   **Local Knowledge Base (RAG):** For in-depth insights from your private documents.
+    *   **PostgreSQL Database:** For querying structured, transactional data with AI-generated and validated SQL queries.
+*   **AI-Powered SQL Generation & Validation:** The agent can dynamically generate and validate SQL `SELECT` queries against a defined database schema, executing them and incorporating results into its research.
+*   **Real-time Insights:** Provides a live log of the agent's thought process, showing each phase of research and synthesis.
+*   **Exportable Reports:** Generated white papers can be easily exported as complete HTML files.
+*   **Production-Ready Backend:** Built with FastAPI, featuring rate limiting, circuit breakers, and asynchronous operations for high performance and resilience.
+*   **Sleek, Professional UI:** A refined, dark greyscale user interface inspired by the "Orbe" aesthetic, designed for intuitive control and clear presentation of results.
 
-Mind (Strategist): Powered by Google Gemini, it creates a comprehensive narrative plan, synthesizes research findings, and generates novel insights.
-
-Soul (Memory): Facilitates Retrieval-Augmented Generation (RAG) from a local document knowledge base (in-memory SimpleVectorStore) and integrates structured data from an asynchronous PostgreSQL database.
-
-Voice (Ghostwriter): Utilizes Ollama-compatible local LLMs (e.g., Mistral, Llama3) to expand the synthesized briefing into a full, polished, HTML-formatted research report.
-
-Hybrid Data Integration: Seamlessly combines information from:
-
-Web Search: For general internet knowledge and current trends.
-
-Local Knowledge Base (RAG): For in-depth insights from your private documents.
-
-PostgreSQL Database: For querying structured, transactional data with AI-generated and validated SQL queries.
-
-AI-Powered SQL Generation & Validation: The agent can dynamically generate and validate SQL SELECT queries against a defined database schema, executing them and incorporating results into its research.
-
-Real-time Insights: Provides a live log of the agent's thought process, showing each phase of research and synthesis.
-
-Exportable Reports: Generated white papers can be easily exported as complete HTML files.
-
-Production-Ready Backend: Built with FastAPI, featuring rate limiting, circuit breakers, and asynchronous operations for high performance and resilience.
-
-Sleek, Professional UI: A refined, dark greyscale user interface inspired by the "Orbe" aesthetic, designed for intuitive control and clear presentation of results.
-
-🧠 Architecture Overview
+### 🧠 Architecture Overview
 
 The NeuroFlux AGRAG operates on a "Trinity" principle, where distinct AI roles collaborate:
 
-Mind (Google Gemini):
+1.  **Mind (Google Gemini):**
+    *   Receives the initial strategic query.
+    *   Generates a `research_plan` that outlines necessary information gathering tasks.
+    *   Chooses appropriate tools (`web_search`, `vector_database_search`, `postgres_query`) for each task.
+    *   Synthesizes all gathered research into a structured "Intelligence Briefing" (JSON format), identifying core analysis, novel insights, and relevant perspectives.
 
-Receives the initial strategic query.
+2.  **Soul (LlamaIndex RAG & AsyncPG):**
+    *   Executes `vector_database_search` queries against an in-memory LlamaIndex vector store (populated from your `knowledge_docs`). Includes re-ranking for improved relevance.
+    *   Manages `postgres_query` requests: leverages Gemini to generate SQL, validates it against a predefined schema, executes it via `asyncpg`, and returns formatted results.
 
-Generates a research_plan that outlines necessary information gathering tasks.
+3.  **Voice (Ollama LLM):**
+    *   Receives the complete "Intelligence Briefing" from the Mind.
+    *   Acts as the "Ghostwriter," expanding the briefing's content into a full, detailed, and stylistically consistent HTML report, strictly adhering to the provided facts and insights.
 
-Chooses appropriate tools (web_search, vector_database_search, postgres_query) for each task.
-
-Synthesizes all gathered research into a structured "Intelligence Briefing" (JSON format), identifying core analysis, novel insights, and relevant perspectives.
-
-Soul (LlamaIndex RAG & AsyncPG):
-
-Executes vector_database_search queries against an in-memory LlamaIndex vector store (populated from your knowledge_docs). Includes re-ranking for improved relevance.
-
-Manages postgres_query requests: leverages Gemini to generate SQL, validates it against a predefined schema, executes it via asyncpg, and returns formatted results.
-
-Voice (Ollama LLM):
-
-Receives the complete "Intelligence Briefing" from the Mind.
-
-Acts as the "Ghostwriter," expanding the briefing's content into a full, detailed, and stylistically consistent HTML report, strictly adhering to the provided facts and insights.
-
-⚙️ Prerequisites
+### ⚙️ Prerequisites
 
 Before you begin, ensure you have the following installed and configured:
 
-Python: Version 3.9 or higher.
+*   **Python:** Version 3.9 or higher.
+*   **Ollama:** Download and install Ollama from [ollama.com](https://ollama.com/).
+    *   After installation, pull the required models. The system attempts to select optimal models (`llama3:8b-instruct`, `command-r`, `mistral`, `llama3`), but `mistral:latest` is preferred for the "Ghostwriter."
+    *   To pull `mistral`: `ollama pull mistral`
+    *   To pull `llama3`: `ollama pull llama3`
+*   **PostgreSQL:** A running PostgreSQL instance.
+    *   You'll need a database and a user with access.
+    *   The `main.py` defines a sample schema (`users`, `products`, `orders`). You should create these tables in your database if you want to test the `postgres_query` tool effectively.
+*   **Google Cloud Account:**
+    *   **Gemini API Key:** Required for the "Mind" component. Enable the Gemini API in your Google Cloud Project.
+    *   **Google Custom Search Engine (CSE) ID (Optional):** Required if you want the `web_search` tool to function. Configure a CSE and link it to your Google API Key.
+*   **Git:** For cloning the repository.
 
-Ollama: Download and install Ollama from ollama.com.
-
-After installation, pull the required models. The system attempts to select optimal models (llama3:8b-instruct, command-r, mistral, llama3), but mistral:latest is preferred for the "Ghostwriter."
-
-To pull mistral: ollama pull mistral
-
-To pull llama3: ollama pull llama3
-
-PostgreSQL: A running PostgreSQL instance.
-
-You'll need a database and a user with access.
-
-The main.py defines a sample schema (users, products, orders). You should create these tables in your database if you want to test the postgres_query tool effectively.
-
-Google Cloud Account:
-
-Gemini API Key: Required for the "Mind" component. Enable the Gemini API in your Google Cloud Project.
-
-Google Custom Search Engine (CSE) ID (Optional): Required if you want the web_search tool to function. Configure a CSE and link it to your Google API Key.
-
-Git: For cloning the repository.
-
-🚀 Installation & Setup
+### 🚀 Installation & Setup
 
 Follow these steps to get NeuroFlux AGRAG up and running:
 
-Clone the Repository:
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/your-username/neuroflux-agrag.git
+    cd neuroflux-agrag
+    ```
+    *(Replace `your-username/neuroflux-agrag.git` with the actual repository URL once you upload it.)*
 
-Generated bash
-git clone https://github.com/your-username/neuroflux-agrag.git
-cd neuroflux-agrag
+2.  **Set Up Python Virtual Environment:**
+    It's highly recommended to use a virtual environment to manage dependencies.
+    ```bash
+    python -m venv venv
+    ```
+    *   **On Linux/macOS:**
+        ```bash
+        source venv/bin/activate
+        ```
+    *   **On Windows:**
+        ```bash
+        .\venv\Scripts\activate
+        ```
 
+3.  **Install Python Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-(Replace your-username/neuroflux-agrag.git with the actual repository URL once you upload it.)
+4.  **Configure Environment Variables:**
+    Create a `.env` file in the root directory of the project (where `main.py` is located) and populate it with your credentials and settings.
+    Copy the `.env.example` to `.env`:
+    ```bash
+    cp .env.example .env
+    ```
+    Then, edit the `.env` file:
+    ```
+    # --- Required API Keys ---
+    GOOGLE_API_KEY="YOUR_GOOGLE_GEMINI_API_KEY"
 
-Set Up Python Virtual Environment:
-It's highly recommended to use a virtual environment to manage dependencies.
+    # --- Ollama Configuration (defaults to localhost:11434, change if different) ---
+    OLLAMA_API_BASE="http://localhost:11434"
 
-Generated bash
-python -m venv venv
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+    # --- Google Custom Search Engine (Optional, for web_search tool) ---
+    # GOOGLE_CSE_ID="YOUR_GOOGLE_CSE_ID"
 
-On Linux/macOS:
+    # --- PostgreSQL Database Configuration ---
+    POSTGRES_HOST="localhost"
+    POSTGRES_PORT=5432
+    POSTGRES_USER="your_pg_user"
+    POSTGRES_PASSWORD="your_pg_password"
+    POSTGRES_DB="your_pg_database_name"
 
-Generated bash
-source venv/bin/activate
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+    # --- Optional: Define your PostgreSQL schema for validation ---
+    # This is critical for the LLM to understand what tables/columns it can query.
+    # The default in main.py is:
+    # POSTGRES_SCHEMA_DEFINITION={"users": ["id", "name", "email", "signup_date", "age"], "products": ["id", "name", "price", "category"], "orders": ["id", "user_id", "product_id", "quantity", "order_date"]}
+    # If you change your schema, update this variable in .env or main.py.
+    ```
+    **IMPORTANT:** Never commit your `.env` file to version control. It contains sensitive API keys. `.gitignore` should already exclude it.
 
-On Windows:
+5.  **Prepare Knowledge Base (Optional but Recommended):**
+    Create a `knowledge_docs` directory in the project root. Place any `.pdf`, `.txt`, `.md`, etc., files you want the "Soul" to draw knowledge from into this directory.
+    ```bash
+    mkdir knowledge_docs
+    # cp your_documents/* knowledge_docs/
+    ```
 
-Generated bash
-.\venv\Scripts\activate
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+6.  **Run the FastAPI Application:**
+    ```bash
+    uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    ```
+    The `--reload` flag is useful for development as it automatically restarts the server when code changes are detected.
 
-Install Python Dependencies:
+### 💻 Usage
 
-Generated bash
-pip install -r requirements.txt
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+1.  **Access the UI:**
+    Open your web browser and navigate to `http://localhost:8000`.
 
-Configure Environment Variables:
-Create a .env file in the root directory of the project (where main.py is located) and populate it with your credentials and settings.
-Copy the .env.example to .env:
+2.  **Initialize Models:**
+    *   The "Ghostwriter" (Target Model) dropdown should auto-populate with available Ollama models. If it shows "Connection failed," ensure Ollama is running and accessible. You can click the `🔄` (refresh) button to retry fetching models.
+    *   The "Mind" (Drafter Model) dropdown is pre-configured with Gemini models.
 
-Generated bash
-cp .env.example .env
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+3.  **Index Knowledge Base (If Applicable):**
+    If you've placed documents in `knowledge_docs/`, click the "Index Knowledge Base" button. This will build an in-memory RAG index. The status will update in the UI.
 
-Then, edit the .env file:
+4.  **Enter Your Strategic Query:**
+    In the large text area at the bottom, enter a detailed strategic query. Examples:
+    *   "Discuss the ethical challenges of using LLMs in critical decision-making processes, particularly when combining data from diverse sources (like structured databases and unstructured documents). Name at least two open-source frameworks or methodologies designed to address these ethical challenges in AI applications, and explain their role."
+    *   "Analyze the privacy implications of integrating user data from an internal PostgreSQL database (specifically focusing on user age, email, and signup date) into LLM-driven decision-making processes. Provide quantifiable insights derived from this data to illustrate potential biases or risks. Furthermore, identify and describe at least two open-source frameworks or methodologies designed for ethical data governance and privacy protection in AI applications."
 
-Generated code
-# --- Required API Keys ---
-GOOGLE_API_KEY="YOUR_GOOGLE_GEMINI_API_KEY"
+5.  **Execute the Agent:**
+    Click the `▶️` (Send/Execute) button. The "Agent's Thought Process" log at the top will show real-time updates as the agent executes its phases: Genesis (Mind planning), Research (Soul & Web tool calls), Synthesis (Mind insight generation), and Ghostwriting (Voice report generation).
 
-# --- Ollama Configuration (defaults to localhost:11434, change if different) ---
-OLLAMA_API_BASE="http://localhost:11434"
+6.  **Export the Report:**
+    Once the agent completes its process, the `⬇️` (Download/Export) button will become active. Click it to download the generated HTML report to your local machine.
 
-# --- Google Custom Search Engine (Optional, for web_search tool) ---
-# GOOGLE_CSE_ID="YOUR_GOOGLE_CSE_ID"
+### 📁 Project Structure
 
-# --- PostgreSQL Database Configuration ---
-POSTGRES_HOST="localhost"
-POSTGRES_PORT=5432
-POSTGRES_USER="your_pg_user"
-POSTGRES_PASSWORD="your_pg_password"
-POSTGRES_DB="your_pg_database_name"
-
-# --- Optional: Define your PostgreSQL schema for validation ---
-# This is critical for the LLM to understand what tables/columns it can query.
-# The default in main.py is:
-# POSTGRES_SCHEMA_DEFINITION={"users": ["id", "name", "email", "signup_date", "age"], "products": ["id", "name", "price", "category"], "orders": ["id", "user_id", "product_id", "quantity", "order_date"]}
-# If you change your schema, update this variable in .env or main.py.
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-
-IMPORTANT: Never commit your .env file to version control. It contains sensitive API keys. .gitignore should already exclude it.
-
-Prepare Knowledge Base (Optional but Recommended):
-Create a knowledge_docs directory in the project root. Place any .pdf, .txt, .md, etc., files you want the "Soul" to draw knowledge from into this directory.
-
-Generated bash
-mkdir knowledge_docs
-# cp your_documents/* knowledge_docs/
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
-
-Run the FastAPI Application:
-
-Generated bash
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
-
-The --reload flag is useful for development as it automatically restarts the server when code changes are detected.
-
-💻 Usage
-
-Access the UI:
-Open your web browser and navigate to http://localhost:8000.
-
-Initialize Models:
-
-The "Ghostwriter" (Target Model) dropdown should auto-populate with available Ollama models. If it shows "Connection failed," ensure Ollama is running and accessible. You can click the 🔄 (refresh) button to retry fetching models.
-
-The "Mind" (Drafter Model) dropdown is pre-configured with Gemini models.
-
-Index Knowledge Base (If Applicable):
-If you've placed documents in knowledge_docs/, click the "Index Knowledge Base" button. This will build an in-memory RAG index. The status will update in the UI.
-
-Enter Your Strategic Query:
-In the large text area at the bottom, enter a detailed strategic query. Examples:
-
-"Discuss the ethical challenges of using LLMs in critical decision-making processes, particularly when combining data from diverse sources (like structured databases and unstructured documents). Name at least two open-source frameworks or methodologies designed to address these ethical challenges in AI applications, and explain their role."
-
-"Analyze the privacy implications of integrating user data from an internal PostgreSQL database (specifically focusing on user age, email, and signup date) into LLM-driven decision-making processes. Provide quantifiable insights derived from this data to illustrate potential biases or risks. Furthermore, identify and describe at least two open-source frameworks or methodologies designed for ethical data governance and privacy protection in AI applications."
-
-Execute the Agent:
-Click the ▶️ (Send/Execute) button. The "Agent's Thought Process" log at the top will show real-time updates as the agent executes its phases: Genesis (Mind planning), Research (Soul & Web tool calls), Synthesis (Mind insight generation), and Ghostwriting (Voice report generation).
-
-Export the Report:
-Once the agent completes its process, the ⬇️ (Download/Export) button will become active. Click it to download the generated HTML report to your local machine.
-
-📁 Project Structure
-Generated code
+```
 neuroflux-agrag/
 ├── main.py                   # FastAPI backend, LLM orchestration, RAG, PostgreSQL integration
 ├── requirements.txt          # Python dependencies
@@ -259,38 +173,32 @@ neuroflux-agrag/
     ├── index.html            # Main HTML UI structure
     ├── style.css             # Frontend styling (CSS)
     └── app.js                # Frontend interactivity (JavaScript)
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-🤝 Contributing
+```
+
+### 🤝 Contributing
 
 Contributions are welcome! If you have suggestions for improvements, bug fixes, or new features, please open an issue or submit a pull request.
 
-📄 License
+### 📄 License
 
-This project is open-source and available under the MIT License.
+This project is open-source and available under the [MIT License](LICENSE).
 
-🙏 Acknowledgements
+### 🙏 Acknowledgements
 
-Google Gemini: For powerful large language models driving the "Mind" component.
+*   **Google Gemini:** For powerful large language models driving the "Mind" component.
+*   **Ollama:** For enabling local, open-source LLM inference for the "Voice" component.
+*   **FastAPI:** For the robust and efficient backend framework.
+*   **LlamaIndex:** For the RAG framework.
+*   **Asyncpg & SQLGlot:** For asynchronous PostgreSQL interaction and SQL validation.
+*   **Feather Icons:** For the clean and modern UI icons.
 
-Ollama: For enabling local, open-source LLM inference for the "Voice" component.
+---
 
-FastAPI: For the robust and efficient backend framework.
-
-LlamaIndex: For the RAG framework.
-
-Asyncpg & SQLGlot: For asynchronous PostgreSQL interaction and SQL validation.
-
-Feather Icons: For the clean and modern UI icons.
-
-Files Needed for Upload to GitHub:
+## **Files Needed for Upload to GitHub:**
 
 Based on the provided code and common practices, here are the essential files and directories you need to commit to your GitHub repository for a complete and runnable project:
 
-Generated code
+```
 neuroflux-agrag/
 ├── main.py
 ├── requirements.txt
@@ -300,29 +208,20 @@ neuroflux-agrag/
     ├── index.html
     ├── style.css
     └── app.js
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
+```
 
-Files/Directories to IGNORE (add to .gitignore if not already present):
+**Files/Directories to IGNORE (add to `.gitignore` if not already present):**
 
-.env (contains sensitive API keys)
+*   `.env` (contains sensitive API keys)
+*   `venv/` (your Python virtual environment)
+*   `__pycache__/` (Python compiled bytecode cache)
+*   `storage/` (LlamaIndex persistence directory, if you were using persistent vector stores like Qdrant; for SimpleVectorStore, it's less critical but still good to ignore if it contains local index data)
+*   `*.txt` files from temporary commands (e.g., `uvicorn mainapp --host 0.0.0.0 --po.txt`)
+*   Any other temporary files or old project versions (e.g., `main1.py`, `main2.py`, `main3.py`, `main4.py`, `neuroflux_local_v5/`, `backups/`, `rename_from_content.py`, `test_import.py`, `config.yaml`, `drive_scanner.py`, `google api OAuth client created - G.txt` shown in your file explorer).
 
-venv/ (your Python virtual environment)
+You should create a `.gitignore` file in your root directory if you don't have one, and add these entries:
 
-__pycache__/ (Python compiled bytecode cache)
-
-storage/ (LlamaIndex persistence directory, if you were using persistent vector stores like Qdrant; for SimpleVectorStore, it's less critical but still good to ignore if it contains local index data)
-
-*.txt files from temporary commands (e.g., uvicorn mainapp --host 0.0.0.0 --po.txt)
-
-Any other temporary files or old project versions (e.g., main1.py, main2.py, main3.py, main4.py, neuroflux_local_v5/, backups/, rename_from_content.py, test_import.py, config.yaml, drive_scanner.py, google api OAuth client created - G.txt shown in your file explorer).
-
-You should create a .gitignore file in your root directory if you don't have one, and add these entries:
-
-Generated code
+```
 # Python
 __pycache__/
 *.pyc
@@ -358,8 +257,4 @@ test_import.py
 config.yaml
 drive_scanner.py
 google*.txt
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
+```

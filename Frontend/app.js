@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             targetModelSelect.innerHTML = ''; // Clear existing options
             
-            // --- CORRECTED LOGIC HERE ---
+            // --- CORRECTED LOGIC HERE (already in previous app.js, but re-confirming) ---
             // The backend's /api/ollama/models endpoint proxies Ollama's /api/tags,
             // which returns an object with a 'models' array.
             if (data.models && data.models.length > 0) {
@@ -139,9 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/agent/execute', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                // CRITICAL FIX: The backend's AgentRequest Pydantic model
-                // only expects 'query'. 'target_model' and 'drafter_model'
-                // are determined by the backend's ResourceManager.
+                // The backend's AgentRequest Pydantic model only expects 'query'.
+                // 'target_model' and 'drafter_model' are determined by the backend's ResourceManager.
                 body: JSON.stringify({ query: query }) 
             });
 

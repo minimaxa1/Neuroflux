@@ -47,8 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
         executeBtn.disabled = !enabled || queryIsEmpty;
         indexBtn.disabled = !enabled; // Index button disabled while any process (execute or index) is running
         queryInput.disabled = !enabled;
-        targetModelSelect.disabled = !enabled;
+        // Drafter model (Gemini) is always available in backend, so can be enabled if not executing
         drafterModelSelect.disabled = !enabled;
+        // Target model (Ollama) depends on backend availability, but generally controlled here
+        // Enable only if not executing AND there are actual models in the dropdown
+        targetModelSelect.disabled = !enabled || targetModelSelect.options.length === 0 || targetModelSelect.options[0].value === 'No models found' || targetModelSelect.options[0].value === 'Connection failed';
+        
         refreshModelsBtn.disabled = !enabled;
         // Export button is disabled if not enabled or no content
         exportBtn.disabled = !enabled || fullReportContent === '';
@@ -57,14 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Model Population Functions ---
     const populateDrafterModels = () => {
         drafterModelSelect.innerHTML = '';
-        // These are fixed as per your Mind configuration in main.py
-        const models = ["Gemini 1.5 Flash", "Gemini 1.5 Pro"]; 
-        models.forEach(modelName => {
-            const option = document.createElement('option');
-            option.value = modelName;
-            option.textContent = modelName;
-            drafterModelSelect.appendChild(option);
-        });
+        // The backend's "Mind" (Gemini) is hardcoded to Gemini 1.5 Flash.
+        // We only offer this option to reflect backend's behavior.
+        const modelName = "Gemini 1.5 Flash"; 
+        const option = document.createElement('option');
+        option.value = modelName;
+        option.textContent = modelName;
+        drafterModelSelect.appendChild(option);
+        drafterModelSelect.value = modelName; // Ensure it's selected
     };
 
     const fetchOllamaModels = async () => {
@@ -78,31 +82,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const data = await response.json();
             
-            targetModelSelect.innerHTML = '';
+            targetModelSelect.innerHTML = ''; // Clear existing options
+            
+            // --- CORRECTED LOGIC HERE ---
+            // The backend's /api/ollama/models endpoint proxies Ollama's /api/tags,
+            // which returns an object with a 'models' array.
             if (data.models && data.models.length > 0) {
+                // Optional: Add a "Select a model" default option if desired
+                // const defaultOption = document.createElement('option');
+                // defaultOption.value = ''; // Empty value for default
+                // defaultOption.textContent = 'Select Ghostwriter Model';
+                // targetModelSelect.appendChild(defaultOption);
+
                 data.models.forEach(model => {
                     const option = document.createElement('option');
-                    option.value = model.name;
-                    option.textContent = model.name;
+                    option.value = model.name; // Use model.name (e.g., "llama3:latest") as the option value
+                    option.textContent = model.name; // Display the model name
                     targetModelSelect.appendChild(option);
                 });
-                // Select 'mistral:latest' if available, otherwise the first one
-                if (Array.from(targetModelSelect.options).some(option => option.value === 'mistral:latest')) {
-                    targetModelSelect.value = 'mistral:latest';
-                } else if (data.models.length > 0) {
-                    targetModelSelect.value = data.models[0].name;
-                }
+                // Select the first model in the list by default, or the default option if added
+                targetModelSelect.value = data.models[0].name; 
                 setStatus('Ready. Select models and enter a query.');
             } else {
-                targetModelSelect.innerHTML = '<option>No models found</option>';
+                // This branch handles cases where 'data.models' is empty or not present
+                targetModelSelect.innerHTML = '<option value="No models found">No models found</option>'; // Add a value
                 setStatus('Ollama found, but no models available.', true);
             }
         } catch (error) {
             console.error('Error fetching models:', error);
             setStatus(`Could not connect to Ollama server or no models: ${error.message}`, true);
-            targetModelSelect.innerHTML = '<option>Connection failed</option>';
+            targetModelSelect.innerHTML = '<option value="Connection failed">Connection failed</option>'; // Add a value
         } finally {
             refreshModelsBtn.classList.remove('spin'); // Remove spin animation
+            toggleControls(true); // Re-enable controls after fetch attempt
         }
     };
 
@@ -110,6 +122,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const executeAgent = async () => {
         const query = queryInput.value.trim();
         if (!query || isExecuting) return;
+
+        // Check if a Ghostwriter model is actually selected/available
+        if (targetModelSelect.options.length === 0 || targetModelSelect.value === 'No models found' || targetModelSelect.value === 'Connection failed') {
+            setStatus("Cannot execute: No Ghostwriter (Ollama) model selected or available.", true);
+            return;
+        }
 
         logOutput.innerHTML = ''; // Clear previous logs
         fullReportContent = ''; // Reset report content
@@ -121,11 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/agent/execute', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    query: query,
-                    target_model: targetModelSelect.value, // This is Ollama model (Ghostwriter)
-                    drafter_model: drafterModelSelect.value // This is Gemini model (Mind)
-                })
+                // CRITICAL FIX: The backend's AgentRequest Pydantic model
+                // only expects 'query'. 'target_model' and 'drafter_model'
+                // are determined by the backend's ResourceManager.
+                body: JSON.stringify({ query: query }) 
             });
 
             if (!response.ok) { // Check for non-2xx HTTP responses
@@ -161,7 +178,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 addLog(data.content, 'error');
                                 setStatus(`Agent Error: ${data.content}`, true); // Show error from backend
                                 break;
-                            case 'complete': setStatus('Agent finished. Report generated. You can now export it.'); break;
+                            case 'complete': 
+                                setStatus('Agent finished. Report generated. You can now export it.'); 
+                                // Display saved file path if available
+                                if (data.file_path) {
+                                    addLog(`Report saved on server at: ${data.file_path}`, 'success');
+                                }
+                                break;
                         }
                     } catch (e) {
                          console.warn("Could not parse JSON from stream:", jsonData, e);
@@ -237,8 +260,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (titleElement) {
             reportTitle = titleElement.textContent;
         }
-        const sanitizedTitle = reportTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-        a.download = `${sanitizedTitle}.html`;
+        // Sanitize filename for download
+        const sanitizedTitle = reportTitle.replace(/[^a-z0-9\s-]/gi, '').trim().replace(/\s+/g, '_').toLowerCase();
+        a.download = `${sanitizedTitle || 'generated_report'}.html`; // Fallback if sanitized title is empty
         a.click();
         URL.revokeObjectURL(url);
     });
@@ -246,9 +270,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initial Page Load ---
     const initialize = async () => {
         toggleControls(false); // Disable initially until models are fetched
-        populateDrafterModels();
-        await fetchOllamaModels();
-        toggleControls(true); // Re-enable after initialization
+        populateDrafterModels(); // Populate Gemini model
+        await fetchOllamaModels(); // Fetch Ollama model and re-enable controls
     };
 
     initialize();
